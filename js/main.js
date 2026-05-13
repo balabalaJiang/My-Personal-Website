@@ -51,6 +51,14 @@ const revealObs = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
+// ── 0. Security (XSS Protection) ────────────────────────────
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.toString().replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[tag] || tag));
+}
+
 // ── 5. Skill bars ───────────────────────────────────────────
 const skillObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -93,11 +101,11 @@ let tooltipTimer = null;
 
 function showTooltip(comp, itemEl) {
   clearTimeout(tooltipTimer);
-  const skillTags = comp.skills.slice(0, 4).map(s => `<span class="tag">${s}</span>`).join('');
+  const skillTags = comp.skills.slice(0, 4).map(s => `<span class="tag">${escapeHTML(s)}</span>`).join('');
   tooltip.innerHTML = `
-    <div class="preview-title">${comp.title.replace('【請替換】','')}</div>
-    <div class="preview-theme">📌 ${comp.theme}</div>
-    <div class="preview-summary">${comp.summary}</div>
+    <div class="preview-title">${escapeHTML(comp.title.replace('【請替換】',''))}</div>
+    <div class="preview-theme">📌 ${escapeHTML(comp.theme)}</div>
+    <div class="preview-summary">${escapeHTML(comp.summary)}</div>
     <div class="preview-skills">${skillTags}</div>
     <div class="preview-hint">點擊查看完整內容 →</div>`;
 
@@ -131,12 +139,12 @@ function renderTimeline() {
     item.style.transitionDelay = `${i * 0.05}s`;
 
     item.innerHTML = `
-      <div class="tl-date">${comp.dateDisplay}</div>
+      <div class="tl-date">${escapeHTML(comp.dateDisplay)}</div>
       <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
-      <div class="tl-content" tabindex="0" role="button" aria-label="${comp.title.replace('【請替換】','')}">
-        <div class="tl-name">${comp.title.replace('【請替換】','')}</div>
-        <span class="award-badge ${awardClass(comp.awardLevel)}">${comp.award}</span>
-        <span class="cat-badge">${comp.categoryLabel}</span>
+      <div class="tl-content" tabindex="0" role="button" aria-label="${escapeHTML(comp.title.replace('【請替換】',''))}">
+        <div class="tl-name">${escapeHTML(comp.title.replace('【請替換】',''))}</div>
+        <span class="award-badge ${awardClass(comp.awardLevel)}">${escapeHTML(comp.award)}</span>
+        <span class="cat-badge">${escapeHTML(comp.categoryLabel)}</span>
       </div>`;
 
     // Hover tooltip
@@ -200,15 +208,15 @@ function openDetail(comp, itemEl) {
   document.getElementById('detail-team').textContent  = comp.team;
 
   document.getElementById('detail-skills').innerHTML =
-    comp.skills.map(s => `<span class="tag">${s}</span>`).join('');
+    comp.skills.map(s => `<span class="tag">${escapeHTML(s)}</span>`).join('');
 
   const lw = document.getElementById('detail-link-wrap');
-  if (comp.link) { lw.style.display = 'block'; document.getElementById('detail-link').href = comp.link; }
+  if (comp.link) { lw.style.display = 'block'; document.getElementById('detail-link').href = comp.link; document.getElementById('detail-link').setAttribute('rel', 'noopener noreferrer'); }
   else           { lw.style.display = 'none'; }
 
   const cert = document.getElementById('detail-cert');
   cert.innerHTML = comp.certificate
-    ? `<img src="${comp.certificate}" alt="獎狀" />`
+    ? `<img src="${encodeURI(comp.certificate)}" alt="獎狀" />`
     : `<div class="detail-cert-icon">🏅</div><span>獎狀 / 截圖<br/><small>填入 certificate 路徑</small></span>`;
 
   if (activeItem) activeItem.classList.remove('active');
@@ -239,20 +247,20 @@ function renderProjects() {
     card.className = 'proj-card reveal';
     card.style.transitionDelay = `${(i % 3) * 0.1}s`;
 
-    const tags = proj.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    const hl   = proj.highlights.map(h => `<li style="font-size:.78rem;color:var(--text2);margin-bottom:.15rem">· ${h}</li>`).join('');
+    const tags = proj.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('');
+    const hl   = proj.highlights.map(h => `<li style="font-size:.78rem;color:var(--text2);margin-bottom:.15rem">· ${escapeHTML(h)}</li>`).join('');
     card.innerHTML = `
       <div class="proj-cover">
-        ${proj.cover ? `<img src="${proj.cover}" alt="${proj.title}"/>` : '<span>💻</span>'}
+        ${proj.cover ? `<img src="${encodeURI(proj.cover)}" alt="${escapeHTML(proj.title)}"/>` : '<span>💻</span>'}
       </div>
       <div class="proj-body">
-        <div class="proj-subtitle">${proj.subtitle}</div>
-        <div class="proj-title">${proj.title.replace('【請替換】','')}</div>
-        <div class="proj-desc">${proj.description}</div>
+        <div class="proj-subtitle">${escapeHTML(proj.subtitle)}</div>
+        <div class="proj-title">${escapeHTML(proj.title.replace('【請替換】',''))}</div>
+        <div class="proj-desc">${escapeHTML(proj.description)}</div>
         <ul style="padding:0;margin-bottom:.8rem">${hl}</ul>
         <div class="proj-tags">${tags}</div>
         <div class="proj-footer">
-          <span class="proj-role">${proj.team}</span>
+          <span class="proj-role">${escapeHTML(proj.team)}</span>
         </div>
       </div>`;
 
@@ -273,15 +281,15 @@ function renderSkills() {
 
     const items = cat.items.map(sk => `
       <div class="skill-item">
-        <div class="skill-name">${sk.name}</div>
+        <div class="skill-name">${escapeHTML(sk.name)}</div>
       </div>`).join('');
 
     card.innerHTML = `
       <div class="skill-cat-header">
         <span class="skill-cat-icon">${cat.icon}</span>
         <div style="flex:1">
-          <span class="skill-cat-name">${cat.category}</span>
-          <span class="skill-cat-percent">${cat.percentage}%</span>
+          <span class="skill-cat-name">${escapeHTML(cat.category)}</span>
+          <span class="skill-cat-percent">${escapeHTML(cat.percentage)}%</span>
         </div>
       </div>
       <div class="skill-items">${items}</div>`;

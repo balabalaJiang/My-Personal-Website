@@ -1,8 +1,8 @@
-# 江永閎 (un hng) — 個人專案作品集與履歷網站
+# 江永閎 — 個人專案作品集與履歷網站
 
 這是一個專為展示個人履歷、競賽歷程與專案成果所開發的靜態響應式網站 (Static RWD Website)。網站以「模組化資料驅動」為核心概念，將畫面渲染與資料分離，方便未來快速擴充與維護。
 
-🔗 **線上瀏覽 (Live Demo)**: [https://balabalaJiang.github.io/My-Personal-Website/](https://balabalaJiang.github.io/My-Personal-Website/) *(請替換為實際網址)*
+🔗 **線上瀏覽 (Live Demo)**: [https://balabalaJiang.github.io/My-Personal-Website/](https://balabalaJiang.github.io/My-Personal-Website/)
 
 ---
 

@@ -20,7 +20,8 @@ const skillsData = [
       { name: 'C++ / C#' },
       { name: 'Node.js' },
       { name: 'MS SQL' },
-      { name: 'MySQL' }
+      { name: 'MySQL' },
+      { name: 'Git' }
     ],
   },
   {
