@@ -1,6 +1,6 @@
-# 江永閎 (un hng) - 個人履歷與專案作品集
+# 江永閎 - 個人履歷與專案作品集
 
-## 1. 個人簡介 (bou M)
+## 1. 個人簡介
 * **學校：** 中山醫學大學 醫學資訊學系 (2022 - 2027)
 * **專業技能：** Pyhon開發、深度學習、專案管理、醫療資訊
 * **身分標籤：** AI & Big Data Engineer | 專注於醫療影像深度學習與 SQL 大數據分析 | Python & PyTorch 實踐者
@@ -17,7 +17,7 @@
 
 ### 核心 AI 與資料科學
 * 45%
-* Python, TensorFlow, Keras, Scikit-Learn, Pandas, Numpy, OpenCV, MATLAB
+* Python, PyTorch, TensorFlow, Keras, Scikit-Learn, Pandas, Numpy, OpenCV, MATLAB
 
 ### 後端開發與資料庫
 * 20%
